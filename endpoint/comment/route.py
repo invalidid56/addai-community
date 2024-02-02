@@ -27,10 +27,10 @@ async def read_comments_by_article(article_id: int) -> list[Comment]:
 
 
 @router.post("/{article_id}", response_model=CommentCreate, tags=["Comment"])
-async def create_comment(comment: CommentCreate, user: User = Depends(get_current_user)) -> Comment:
+async def create_comment(article_id: int, comment: CommentCreate, user: User = Depends(get_current_user)) -> Comment:
     """
     """
-    return await service.create_comment(dict(**comment.dict(), creator_id=user.id))
+    return await service.create_comment(dict(**comment.dict(), article_id=article_id, creator_id=user.id))
 
 
 @router.delete("/{comment_id}", tags=["Comment"])

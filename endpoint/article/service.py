@@ -48,13 +48,14 @@ async def get_articles_all() -> list[Article]:
         raise HTTPException(
             status_code=500, detail=f"Unknown Error. {e.orig.pgcode}: {e.orig}"
         ) from e
+    return res
 
 
 async def create_article(article_req: dict) -> Article:
     try:
         # TODO: 광고 이미지 생성 로직 추가
-
-        res: Article = await repo.create_article(**article_req, banner_image="banner_image")
+        # banner = await generate_banner(article_req["title"])
+        res: Article = await repo.create_article(dict(**article_req))
     except IntegrityError as e:
         code: int = int(e.orig.pgcode)
         if code == 23503:

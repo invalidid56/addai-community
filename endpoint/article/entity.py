@@ -23,5 +23,4 @@ class ArticleCreate(Article):
 
 class ArticleGet(Article):
     id: int
-    banner_image: str
     creator_id: int

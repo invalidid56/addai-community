@@ -37,7 +37,7 @@ async def get_comments_by_article(article_id: int) -> list[Comment]:
 
 async def create_comment(comment_req: dict) -> Comment:
     try:
-        res: Comment = await repo.create_comment(**comment_req)
+        res: Comment = await repo.create_comment(comment_req)
     except IntegrityError as e:
         code: int = int(e.orig.pgcode)
         if code == 23503:

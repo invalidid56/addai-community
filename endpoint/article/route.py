@@ -10,7 +10,7 @@ router = APIRouter(prefix="/article")
 
 
 @router.get("/", response_model=list[ArticleGet], tags=["Article"])
-async def read_articles() -> list[Article]:
+async def read_articles() -> list[ArticleGet]:
     """
     """
     res = await service.get_articles_all()
@@ -20,14 +20,14 @@ async def read_articles() -> list[Article]:
 
 
 @router.get("/{article_id}", response_model=ArticleGet, tags=["Article"])
-async def read_article(article_id: int) -> Article:
+async def read_article(article_id: int) -> ArticleGet:
     """
     """
     return await service.get_article(article_id)
 
 
 @router.get("/category/{category}", response_model=list[ArticleGet], tags=["Article"])
-async def read_articles_by_category(category: str) -> list[Article]:
+async def read_articles_by_category(category: str) -> list[ArticleGet]:
     """
     """
     res = await service.get_articles_by_category(category)
