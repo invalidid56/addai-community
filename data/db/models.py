@@ -12,6 +12,33 @@ class User(Base):
     password = Column(String)
 
 
+class Campaign(Base):
+    __tablename__ = "campaign"
+    id = Column(Integer, primary_key=True, index=True)
+
+    name = Column(String, index=True, nullable=False)
+    description = Column(String, nullable=False)
+    category = Column(String, index=True, nullable=False)
+    budget_limit = Column(Integer, nullable=False)
+    creator_id = Column(
+        Integer, ForeignKey("user.id", onupdate="CASCADE", ondelete="CASCADE")
+    )
+    creator = relationship("User", backref="campaigns")
+
+    images = Column(String, nullable=False)
+
+
+class Banner(Base):
+    __tablename__ = "banner"
+
+    id = Column(Integer, primary_key=True, index=True)
+    image_link = Column(String)
+    clicks = Column(Integer)
+
+    campaign_id = Column(Integer, ForeignKey("campaign.id"))
+    campaign = relationship("Campaign", backref="banners")
+
+
 class Article(Base):
     __tablename__ = "article"
     id = Column(Integer, primary_key=True, index=True)
@@ -21,7 +48,7 @@ class Article(Base):
     title = Column(String, index=True, nullable=False)
     content = Column(String, nullable=False)
 
-    banner_image = Column(String)   # S3 Link
+    banner_id = Column(Integer, ForeignKey("banner.id"))
 
     creator_id = Column(
         Integer, ForeignKey("user.id", onupdate="CASCADE", ondelete="CASCADE")
