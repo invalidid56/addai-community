@@ -69,4 +69,6 @@ jobs:
                 -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
                 -e CREDENTIAL_ALGORITHM=${{ secrets.CREDENTIAL_ALGORITHM }} \
                 -e CREDENTIAL_SECRET=${{ secrets.CREDENTIAL_SECRET }} \
+                -e S3_BUCKET=${{ secrets.S3_BUCKET }} \
+                -e OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
                 invalidid56/addai-community:latest
