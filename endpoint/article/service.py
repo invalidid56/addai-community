@@ -64,9 +64,10 @@ async def create_article(article_req: dict) -> Article:
         res = res.split("#######")
 
         image_url = generate_banner.create_banner("Generate Image of NIKE Snickers with this background: " + res[-1])
+        slogan = res[-2]
+        desc = res[-3]
 
-        res: Article = await repo.create_article(dict(**article_req, banner_link=image_url))
-
+        res: Article = await repo.create_article(dict(**article_req, banner_link=image_url, banner_slogan=slogan, banner_desc=desc))
 
     except IntegrityError as e:
         code: int = int(e.orig.pgcode)

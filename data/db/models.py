@@ -66,3 +66,6 @@ class Article(Base):
     creator = relationship("User", backref="articles")
 
     banner_link = Column(String)
+    banner_slogan = Column(String)
+    banner_desc = Column(String)
+

@@ -25,3 +25,6 @@ class ArticleGet(Article):
     id: int
     creator_id: int
     banner_link: str | None
+    banner_slogan: str | None
+    banner_desc: str | None
+
