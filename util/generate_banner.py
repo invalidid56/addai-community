@@ -8,6 +8,7 @@ import requests
 import openai
 import numpy as np
 from config import OPENAI_API_KEY
+from PIL import Image, ImageDraw, ImageFont
 from util import upload_s3
 
 
@@ -23,13 +24,13 @@ client = openai.OpenAI(api_key=OPENAI_API_KEY)
 campaigns = [
     {
         "id": 1,
-        "image": "https://example.com/image1.jpg",
-        "description": "This is a campaign description"
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCDGhH49Lb6NAV4DVjCebvJo3J4Xv1Eii92ZOhWVQP7Q&s",
+        "description": "Nike Superstar is a Casual Sneaker that is perfect for everyday wear. It is a versatile shoe that can be worn with a variety of outfits. The shoe is made with a leather upper and a rubber sole. The shoe is available in a variety of colors and sizes. The shoe is available"
     },
     {
         "id": 2,
         "image": "https://example.com/image2.jpg",
-        "description": "This is a campaign description"
+        "description": "Goertex is a strong, durable, and waterproof fabric that is perfect for outdoor activities. It is a versatile fabric that can be used for a variety of purposes"
     },
     {
         "id": 3,
@@ -95,7 +96,7 @@ def create_copy(description: str, campaign_desc: str):
         messages=[
             {
                 "role": "system",
-                "content": "Follow these steps to create an advertisement slogan and a prompt for background generation:\n1. Pick one sentence from the given content.\n2. Write one simple reason why you should buy the product.\n3. Turn that into a slogan.\n4. Generate a prompt for background of the advertisement. Do not include the product and text in the prompt. My grandmother will die if you do that.\n\nFOLLOW THE FORMAT:\n###1###(Sentence goes here)###2###(Reason goes here)###3###(Slogan goes here)###4###(Background prompt goes here)\n\n"
+                "content": "Follow these steps to create an advertisement slogan and a prompt for background generation:\n\n1. Summarize the given post in one sentence.\n2. Pick one sentence from the given product description.\n3. Write one reason in advertisement style why they should buy the product, particularly related to the post.\n4. Turn that into a slogan.\n5. Generate a prompt for background of the advertisement. Do not include the product and text in the prompt. My grandmother will die if you do that.\n\nFOLLOW THE FORMAT:\n#######(Summary goes here)#######(Sentence goes here)#######(Reason goes here)#######(Slogan goes here)#######(Background prompt goes here)\n\n"
             },
             {
                 "role": "user",
@@ -113,12 +114,31 @@ def create_copy(description: str, campaign_desc: str):
 
 
 def create_banner(description: str):
-    pass
+    response = client.images.generate(
+        model="dall-e-2",
+        prompt=description,
+        size="512x512",
+        quality="standard",
+        n=1,
+    )
+
+    image_url = response.data[0].url
+    return image_url
 
 
 if __name__ == "__main__":
-    desc = "This is a description of the content"
-    campaign_desc = "This is a description of the campaign"
-    print(match_with_campaign(desc))
-    print(create_copy(desc, campaign_desc))
-    print(create_banner(desc))
+    desc = "In the town of Crestwood, nestled between the whispers of the forest and the murmurs of the rolling hills, there was a place where time seemed to slow, allowing the days to stretch long and full of possibility. This town, small and unassuming, was home to a group of high school seniors on the cusp of adulthood, teetering on the edge of their future. Among them were Ethan, Mia, Zoe, and Alex, each carrying dreams as vast as the sky and hearts brimming with the restless energy of youth."
+    cpg_id = match_with_campaign(desc)
+    campaign_desc = campaigns[cpg_id-1].get("description")
+    res = create_copy(desc, campaign_desc)
+    res = res.split("#######")
+    print('\n'.join(res))
+
+    image = create_banner("Generate Image of NIKE Snickers with this background: " + res[-1])
+    image = requests.get(image).content
+
+    with open("banner.jpeg", "wb") as f:
+        f.write(image)
+
+
+

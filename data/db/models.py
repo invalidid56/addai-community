@@ -64,3 +64,5 @@ class Article(Base):
         Integer, ForeignKey("user.id", onupdate="CASCADE", ondelete="CASCADE")
     )
     creator = relationship("User", backref="articles")
+
+    banner_link = Column(String)

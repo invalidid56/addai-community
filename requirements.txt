@@ -33,6 +33,7 @@ multidict==6.0.5
 numpy==1.26.3
 openai==1.10.0
 passlib==1.7.4
+pillow==10.2.0
 psycopg2==2.9.9
 pyasn1==0.5.1
 pycparser==2.21

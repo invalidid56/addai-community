@@ -24,3 +24,4 @@ class ArticleCreate(Article):
 class ArticleGet(Article):
     id: int
     creator_id: int
+    banner_link: str | None

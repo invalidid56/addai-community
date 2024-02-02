@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete, update, insert
 from data.db.database import Transactional
-from data.db.models import Article
+from data.db.models import Article, Banner
 
 
 @Transactional()
@@ -42,3 +42,19 @@ async def update_article(article_id: int, article: dict, session: AsyncSession =
 @Transactional()
 async def delete_article(article_id: int, session: AsyncSession = None) -> None:
     await session.execute(delete(Article).where(Article.id == article_id))
+
+
+@Transactional()
+async def get_banner_by_article(article_id: int, session: AsyncSession = None) -> Banner:
+    result = await session.execute(select(Banner).where(Banner.article_id == article_id))
+    return result.scalars().all()
+
+
+@Transactional()
+async def create_banner(banner: dict, session: AsyncSession = None) -> Banner:
+    _banner = Banner(**banner)
+    session.add(_banner)
+    await session.commit()
+    await session.refresh(_banner)
+    return _banner
+

@@ -2,8 +2,10 @@ from fastapi import HTTPException
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
 import endpoint.article.repository as repo
-from data.db.models import Article
+from data.db.models import Article, Banner
 from util import upload_s3, generate_banner
+
+import requests
 
 
 async def get_article(article_id: int) -> Article:
@@ -55,7 +57,17 @@ async def create_article(article_req: dict) -> Article:
     try:
         # TODO: 광고 이미지 생성 로직 추가
         # banner = await generate_banner(article_req["title"])
-        res: Article = await repo.create_article(dict(**article_req))
+
+        cpg_id = generate_banner.match_with_campaign(article_req["content"])
+        campaign_desc = generate_banner.campaigns[cpg_id - 1].get("description")
+        res = generate_banner.create_copy(article_req["content"], campaign_desc)
+        res = res.split("#######")
+
+        image_url = generate_banner.create_banner("Generate Image of NIKE Snickers with this background: " + res[-1])
+
+        res: Article = await repo.create_article(dict(**article_req, banner_link=image_url))
+
+
     except IntegrityError as e:
         code: int = int(e.orig.pgcode)
         if code == 23503:
