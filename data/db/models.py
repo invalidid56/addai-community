@@ -28,6 +28,16 @@ class Campaign(Base):
     images = Column(String, nullable=False)
 
 
+class Comment(Base):
+    __tablename__ = "comment"
+    id = Column(Integer, primary_key=True, index=True)
+
+    content = Column(String, nullable=False)
+    article_id = Column(Integer, ForeignKey("article.id"))
+    creator_id = Column(Integer, ForeignKey("user.id"))
+    article = relationship("Article", backref="comments")
+
+
 class Banner(Base):
     __tablename__ = "banner"
 

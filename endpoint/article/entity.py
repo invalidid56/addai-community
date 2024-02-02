@@ -11,7 +11,6 @@ class Article(BaseModel):
     category: Category
     title: str
     content: str
-    banner_image: str = "https://via.placeholder.com/150"
 
     class Config:
         orm_mode = True

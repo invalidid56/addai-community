@@ -8,6 +8,7 @@ import requests
 import openai
 import numpy as np
 from config import OPENAI_API_KEY
+from util import upload_s3
 
 
 COPYWRITE_PROMPT = """Follow these steps to create an advertisement slogan and a prompt for background generation:

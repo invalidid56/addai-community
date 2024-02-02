@@ -3,6 +3,7 @@ from sqlalchemy.exc import IntegrityError, NoResultFound
 
 import endpoint.article.repository as repo
 from data.db.models import Article
+from util import upload_s3, generate_banner
 
 
 async def get_article(article_id: int) -> Article:
@@ -51,8 +52,9 @@ async def get_articles_all() -> list[Article]:
 
 async def create_article(article_req: dict) -> Article:
     try:
-        res: Article = await repo.create_article(article_req)
         # TODO: 광고 이미지 생성 로직 추가
+
+        res: Article = await repo.create_article(**article_req, banner_image="banner_image")
     except IntegrityError as e:
         code: int = int(e.orig.pgcode)
         if code == 23503:
