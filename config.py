@@ -16,3 +16,4 @@ DB_CONFIG = {
 }
 
 SITE_ENV = os.getenv("SITE_ENV", "local")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
