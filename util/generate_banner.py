@@ -96,7 +96,20 @@ def create_copy(description: str, campaign_desc: str):
         messages=[
             {
                 "role": "system",
-                "content": "Follow these steps to create an advertisement slogan and a prompt for background generation:\n\n1. Summarize the given post in one sentence.\n2. Pick one sentence from the given product description.\n3. Write one reason in advertisement style why they should buy the product, particularly related to the post.\n4. Turn that into a slogan.\n5. Generate a prompt for background of the advertisement. Do not include the product and text in the prompt. My grandmother will die if you do that.\n\nFOLLOW THE FORMAT:\n#######(Summary goes here)#######(Sentence goes here)#######(Reason goes here)#######(Slogan goes here)#######(Background prompt goes here)\n\n"
+                "content": """
+                Follow these steps to create an advertisement slogan and a prompt for background generation:
+
+1. Summarize the given post in one sentence.
+2. Pick one sentence from the given product description.
+3. Write one reason in advertisement style why they should buy the product, particularly related to the post.
+4. Turn that into a slogan.
+5. Generate a prompt for background of the advertisement. Include the product.
+Never include text in the prompt. My grandmother will die if you do that.
+Always add keywords from the content. And with lots of commas.
+(ex. mountain, rays of sunlight, rugged terrain, narrow, winding path, cliff face, highly detailed, sharp focus.)
+
+FOLLOW THE FORMAT:
+#######(Summary goes here)#######(Sentence goes here)#######(Reason goes here)#######(Slogan goes here)#######(Background prompt goes here)"""
             },
             {
                 "role": "user",

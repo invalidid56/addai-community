@@ -63,7 +63,7 @@ async def create_article(article_req: dict) -> Article:
         res = generate_banner.create_copy(article_req["content"], campaign_desc)
         res = res.split("#######")
 
-        image_url = generate_banner.create_banner("Generate Image of NIKE Snickers with this background: " + res[-1])
+        image_url = generate_banner.create_banner("This is Important -> Add the Image of **NIKE Shoes** with this background: " + res[-1])
         slogan = res[-2]
         desc = res[-3]
 
